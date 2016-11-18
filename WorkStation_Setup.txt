@@ -1,0 +1,50 @@
+
+#Workstation & bot linking Setup (ubuntu 14.04)
+
+(might just use the logiler package installer)
+
+##Download the repositories	
+	$git clone https://<username>@bitbucket.org/seaos/logiler_bringup.git ~/ros/catkin_ws/src/logiler_bringup
+	$git clone https://<username>@bitbucket.org/seaos/logiler_description.git ~/ros/catkin_ws/src/logiler_description
+	$git clone https://<username>@bitbucket.org/seaos/logiler_navigation.git ~/ros/catkin_ws/src/logiler_navigation
+	$git clone https://<username>@bitbucket.org/seaos/logiler_viz.git ~/ros/catkin_ws/src/logiler_viz
+
+	*note*
+	delete the line <run_depend>logiler_bringup</run_depend> on logiler_navigation package.xml
+
+##Open catkin folder then compile and install
+	$cd ~/ros/catkin_ws
+	$catkin_make
+	$catkin_make install
+
+##Edit the hosts on both the Workstation & Bot side.
+	$sudo nano /etc/hosts
+
+	On the workstation side add your bots ip and hostname
+	ex. 192.168.1.x    bot_host
+
+	On the bot's side add your bots ip and hostname
+	ex. 192.168.1.x    work_hosts
+
+	*note*
+	"this is necessary for the bot environment for communicating"
+
+##Install teleop on workstation
+	$sudo apt-get update
+	$sudo apt-get upgrade
+	$sudo apt-get install ros-indigo-turtlebot-teleop
+
+
+#TESTING
+
+##Open a new terminal on the workstation
+	$roslaunch logiler_bringup map.launch
+
+##Prepare a 2 seperate terminal on workstation
+	do this on both
+	$export ROS_MASTER_URI=http://<bot ip>:11311
+
+	execute this
+	$roslaunch turtlebot_teleop keyboard_teleop.launch
+	and this on the other
+	$roslaunch logiler_rviz_launchers view_navigation.launch
